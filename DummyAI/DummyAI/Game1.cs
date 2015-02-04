@@ -20,11 +20,19 @@ namespace DummyAI
         SpriteBatch spriteBatch;
         GameScene gameScene;
 
+        public Game1 TheGame 
+        {
+            get { return this; }
+        }
+
+        public void testc() {
+
+        }
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            gameScene = new GameScene(this);
+            gameScene = new GameScene(this, graphics);
         }
 
         /// <summary>
@@ -36,7 +44,7 @@ namespace DummyAI
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
+            gameScene.Initialize();
             base.Initialize();
         }
 

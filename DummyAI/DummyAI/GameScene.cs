@@ -17,10 +17,23 @@ namespace DummyAI
     /// </summary>
     public class GameScene : Microsoft.Xna.Framework.GameComponent
     {
-        public GameScene(Game game)
+        Vector2 _sceneDimensions;
+        List<SceneObject> _sceneObjects;
+
+        public GameScene(Game game, GraphicsDeviceManager graphics)
             : base(game)
         {
-            Vector2 sceneDimensions = new Vector2(50, 50);
+            _sceneDimensions = new Vector2(50, 50);
+            _sceneObjects = new List<SceneObject>();
+            for (int i = 0; i < 5; i++)
+            {
+                for (int j = 0; j < 5; j++)
+                {
+                    SceneObject obj = new SceneObject(game);
+                    obj.Position = new Vector2(i, j) * 55;
+                    _sceneObjects.Add(obj);
+                }                
+            }
         }
 
         /// <summary>
@@ -30,6 +43,11 @@ namespace DummyAI
         public override void Initialize()
         {
             // TODO: Add your initialization code here
+            Random rand = new Random();
+            foreach (SceneObject obj in _sceneObjects)
+            {
+                obj.Initialize((float)rand.NextDouble());
+            }
 
             base.Initialize();
         }
@@ -50,23 +68,22 @@ namespace DummyAI
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public void Draw(SpriteBatch spriteBatch, GraphicsDeviceManager graphics)
-        {            
-            Texture2D rect = new Texture2D(graphics.GraphicsDevice, 50, 50);
-            const int DIMENSION = 50;
-            Color[] data = new Color[DIMENSION * DIMENSION];
-            for (int i = 0; i < data.Length; ++i) data[i] = Color.Teal;
-            rect.SetData(data);
-
+        {
             Vector2 coor = new Vector2(10, 10);
 
-            for (int x = 0; x < 5; x++)
+            foreach (SceneObject obj in _sceneObjects)
             {
-                for (int y = 0; y < 5; y++)
-                {
-                    Vector2 offsetCoor = coor + (DIMENSION + 1) * new Vector2(x, y);
-                    spriteBatch.Draw(rect, offsetCoor, Color.White);
-                }
-            }   
+                spriteBatch.Draw(obj.Texture, obj.Position, Color.White);
+            }
+
+            //for (int x = 0; x < 5; x++)
+            //{
+            //    for (int y = 0; y < 5; y++)
+            //    {
+            //        Vector2 offsetCoor = coor + (DIMENSION + 1) * new Vector2(x, y);
+            //        spriteBatch.Draw(rect, offsetCoor, Color.White);
+            //    }
+            //}
         }
     }
 }
