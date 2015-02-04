@@ -18,6 +18,13 @@ namespace DummyAI
     public class SceneObject : Microsoft.Xna.Framework.GameComponent
     {
         Vector2 position;
+        EnvironmentType environmentType;
+
+        private enum EnvironmentType
+        {
+            TUNDRA,
+            GRASSLAND
+        }
         public Vector2 Position 
         {
             get { return position; }
@@ -46,12 +53,27 @@ namespace DummyAI
         /// </summary>
         public void Initialize(float rand)
         {
+            Color targetColor;
+            if (rand < 0.5f)
+            {
+                environmentType = EnvironmentType.TUNDRA;
+                targetColor = Color.LightSteelBlue;
+            }
+            else if (rand > 0.50f)
+            {
+                environmentType = EnvironmentType.GRASSLAND;
+                targetColor = Color.LawnGreen;
+            }
+            else
+            {
+                targetColor = Color.Brown;
+            }
             
             // TODO: Add your initialization code here0
             texture = new Texture2D(Game.GraphicsDevice, DIMENSION, DIMENSION);
 
             Color[] data = new Color[DIMENSION * DIMENSION];
-            for (int i = 0; i < data.Length; ++i) data[i] = Color.Lerp(Color.White, Color.Brown, 0.5f * rand);
+            for (int i = 0; i < data.Length; ++i) data[i] = Color.Lerp(Color.SaddleBrown, targetColor, rand);
             this.texture.SetData(data);
 
             base.Initialize();
