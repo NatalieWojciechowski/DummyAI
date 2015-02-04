@@ -18,11 +18,13 @@ namespace DummyAI
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        GameScene gameScene;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            gameScene = new GameScene(this);
         }
 
         /// <summary>
@@ -83,20 +85,8 @@ namespace DummyAI
         {
             GraphicsDevice.Clear(Color.Black);
 
-            Texture2D rect = new Texture2D(graphics.GraphicsDevice, 50, 50);
-            const int DIMENSION = 50;
-            Color[] data = new Color[DIMENSION * DIMENSION];
-            for (int i = 0; i < data.Length; ++i) data[i] = Color.Teal;
-            rect.SetData(data);
-
-            Vector2 coor = new Vector2(10, 10);
             spriteBatch.Begin();
-            for(int x=0; x<5; x++){
-                for(int y=0; y<5; y++){
-                    Vector2 offsetCoor = coor + (DIMENSION + 1) * new Vector2(x, y);
-                    spriteBatch.Draw(rect, offsetCoor, Color.White);
-                }
-            }
+            gameScene.Draw(spriteBatch, graphics);
             spriteBatch.End();
 
             base.Draw(gameTime);
