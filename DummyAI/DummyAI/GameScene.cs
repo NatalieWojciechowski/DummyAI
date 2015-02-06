@@ -18,20 +18,24 @@ namespace DummyAI
     public class GameScene : Microsoft.Xna.Framework.GameComponent
     {
         Vector2 _sceneDimensions;
-        List<SceneObject> _sceneObjects;
+        //List<SceneObject> _sceneObjects;
+        SceneObject[,] sObjects;
 
         public GameScene(Game game, GraphicsDeviceManager graphics)
             : base(game)
         {
             _sceneDimensions = new Vector2(50, 50);
-            _sceneObjects = new List<SceneObject>();
+            //_sceneObjects = new List<SceneObject>();
+            sObjects = new SceneObject[5,5];
+
             for (int i = 0; i < 5; i++)
             {
                 for (int j = 0; j < 5; j++)
                 {
                     SceneObject obj = new SceneObject(game);
-                    obj.Position = new Vector2(i, j) * 55;
-                    _sceneObjects.Add(obj);
+                    obj.Position = new Vector2(j, i) * 55;
+                    //_sceneObjects.Add(obj);
+                    sObjects[j, i] = obj;
                 }                
             }
         }
@@ -44,11 +48,12 @@ namespace DummyAI
         {
             // TODO: Add your initialization code here
             Random rand = new Random();
-            foreach (SceneObject obj in _sceneObjects)
+            foreach (SceneObject obj in sObjects)
             {
                 obj.Initialize((float)rand.NextDouble());
             }
 
+            checkNeighbors();
             base.Initialize();
         }
 
@@ -63,6 +68,26 @@ namespace DummyAI
             base.Update(gameTime);
         }
 
+
+        public void checkNeighbors() {     
+            int count = sObjects.Length;
+            int xBounds = 5;
+            int yBounds = 5;
+
+            for (int i = 0; i < yBounds; i++)
+            {
+                for (int j = 0; j < xBounds; j++)
+                {
+                    if (j > 0 && j < xBounds)
+                    {
+                        Console.WriteLine(i + " " + j + sObjects[j, i].Position.ToString());                        
+                    }
+                }
+            }
+          
+
+        }
+
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
@@ -71,7 +96,7 @@ namespace DummyAI
         {
             Vector2 coor = new Vector2(10, 10);
 
-            foreach (SceneObject obj in _sceneObjects)
+            foreach (SceneObject obj in sObjects)
             {
                 spriteBatch.Draw(obj.Texture, obj.Position, Color.White);
             }

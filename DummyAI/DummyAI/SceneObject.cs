@@ -17,29 +17,30 @@ namespace DummyAI
     /// </summary>
     public class SceneObject : Microsoft.Xna.Framework.GameComponent
     {
-        Vector2 position;
-        EnvironmentType environmentType;
+        Vector2 _position;
+        EnvironmentType _environmentType;
+        Color _color;
+        Texture2D _texture;
+        const int DIMENSION = 50;
+        float _temp;
 
         private enum EnvironmentType
         {
             TUNDRA,
             GRASSLAND
         }
+
         public Vector2 Position 
         {
-            get { return position; }
-            set { position = value; }
+            get { return _position; }
+            set { _position = value; }
         }
-        Color color;
-
-        Texture2D texture;
         public Texture2D Texture
         {
-            get { return texture; }
-            set { texture = value; }
+            get { return _texture; }
+            set { _texture = value; }
         }
         
-        const int DIMENSION = 50;
 
         public SceneObject(Game game)
             : base(game)
@@ -56,13 +57,15 @@ namespace DummyAI
             Color targetColor;
             if (rand < 0.5f)
             {
-                environmentType = EnvironmentType.TUNDRA;
+                _environmentType = EnvironmentType.TUNDRA;
                 targetColor = Color.LightSteelBlue;
+                _temp = 12f;
             }
             else if (rand > 0.50f)
             {
-                environmentType = EnvironmentType.GRASSLAND;
+                _environmentType = EnvironmentType.GRASSLAND;
                 targetColor = Color.LawnGreen;
+                _temp = 50f;
             }
             else
             {
@@ -70,11 +73,11 @@ namespace DummyAI
             }
             
             // TODO: Add your initialization code here0
-            texture = new Texture2D(Game.GraphicsDevice, DIMENSION, DIMENSION);
+            _texture = new Texture2D(Game.GraphicsDevice, DIMENSION, DIMENSION);
 
             Color[] data = new Color[DIMENSION * DIMENSION];
             for (int i = 0; i < data.Length; ++i) data[i] = Color.Lerp(Color.SaddleBrown, targetColor, rand);
-            this.texture.SetData(data);
+            this._texture.SetData(data);
 
             base.Initialize();
         }
